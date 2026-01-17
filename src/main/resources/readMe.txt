@@ -1,4 +1,4 @@
-Query:
+**QUERY**
 http://localhost:8080/graphql
 
 {
@@ -13,3 +13,9 @@ http://localhost:8080/graphql
   "variables": {}
 }
 
+**MUTATION**
+
+{
+  "query": "mutation { createBook(name: \"My new book\", pages: 101) }",
+  "variables": {}
+}

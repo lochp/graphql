@@ -1,12 +1,11 @@
 package com.microserviceslab.graphql.repository;
 
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
 
 import com.microserviceslab.graphql.model.Book;
+import com.microserviceslab.graphql.utils.Utils;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -26,9 +25,8 @@ public class BookRepository {
 	}
 	
 	public Mono<Long> createBook(Book book) {
-		UUID bookId = UUID.randomUUID();
 		return databaseClient.sql("INSERT INTO books(id, name, pages) VALUES(:id, :name, :pages ) ")
-				.bind("id", bookId.variant())
+				.bind("id", Utils.genId())
 				.bind("name", book.getName())
 				.bind("pages", book.getPages())
 				.fetch().rowsUpdated();

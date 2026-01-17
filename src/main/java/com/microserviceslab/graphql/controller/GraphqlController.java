@@ -20,8 +20,14 @@ import reactor.core.publisher.Mono;
 @RestController
 public class GraphqlController {
 	
+//	@Autowired(required=true)
+	private final GraphQL graphql;
+	
 	@Autowired
-	private GraphQL graphql;
+    public GraphqlController(GraphQL graphQL) {
+        this.graphql = graphQL;
+    }
+
 	
 	@PostMapping(value = "graphql", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Mono<Map<String, Object>> execute(@RequestBody GraphqlRequestBody body) {

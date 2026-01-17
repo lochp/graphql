@@ -15,5 +15,4 @@ public class GraphqlRequestBody {
 	private String operationName;
 	private Map<String, Object> variables;
 	
-
 }
