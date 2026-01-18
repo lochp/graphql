@@ -38,14 +38,4 @@ public class BookRepository {
 				.fetch().rowsUpdated().thenReturn(id);
 	}
 	
-	public Mono<Long> createBook(Book book, final String authorName, final int age) {
-		
-		
-		return databaseClient.sql("INSERT INTO books(id, name, pages) VALUES(:id, :name, :pages ) ")
-				.bind("id", Utils.genId())
-				.bind("name", book.getName())
-				.bind("pages", book.getPages())
-				.fetch().rowsUpdated();
-	}
-	
 }

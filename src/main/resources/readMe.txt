@@ -13,6 +13,11 @@ http://localhost:8080/graphql
   "variables": {}
 }
 
+{
+  "query": "query { getBook(id: 971309300) { id name pages author {id name age } } }",
+  "variables": {}
+}
+
 **MUTATION**
 
 {

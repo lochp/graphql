@@ -32,13 +32,4 @@ public class AuthorService {
 		};
 	}
 	
-//	public DataFetcher<CompletableFuture<Long>> createAuthor(){
-//		return evn -> {
-//			final String name = evn.getArgument("name");
-//			final Integer age = evn.getArgument("age");
-//			final Integer bookId = evn.getArgument("bookId");
-//			return authorRepo.createAuthor(new Author(null, name, age, bookId)).toFuture();
-//		};
-//	}
-
 }
