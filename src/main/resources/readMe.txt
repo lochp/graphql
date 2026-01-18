@@ -9,7 +9,7 @@ http://localhost:8080/graphql
 }
 
 {
-  "query": "query { getBooks { id name pages } }",
+  "query": "query { getBooks { id name pages author {id name age } } }",
   "variables": {}
 }
 

@@ -17,7 +17,8 @@ public class BookRepository {
 	private DatabaseClient databaseClient;
 	
 	public Mono<Book> getBook(int id) {
-		return databaseClient.sql(String.format("SELECT * FROM books WHERE id = %d", id)).map(row -> new Book(row.get("id", Integer.class), row.get("name", String.class), row.get("pages", Integer.class))).one();
+		return databaseClient.sql(String.format("SELECT * FROM books WHERE id = %d", id))
+				.map(row -> new Book(row.get("id", Integer.class), row.get("name", String.class), row.get("pages", Integer.class))).one();
 	}
 	
 	public Mono<Book> getBookByName(final String name) {
