@@ -20,11 +20,27 @@ public class BookRepository {
 		return databaseClient.sql(String.format("SELECT * FROM books WHERE id = %d", id)).map(row -> new Book(row.get("id", Integer.class), row.get("name", String.class), row.get("pages", Integer.class))).one();
 	}
 	
+	public Mono<Book> getBookByName(final String name) {
+		return databaseClient.sql(String.format("SELECT * FROM books WHERE name = %s", name))
+				.map(row -> new Book(row.get("id", Integer.class), row.get("name", String.class), row.get("pages", Integer.class))).one();
+	}
+	
 	public Flux<Book> getBooks() {
 		return databaseClient.sql("SELECT * FROM books").map(row -> new Book(row.get("id", Integer.class), row.get("name", String.class), row.get("pages", Integer.class))).all();
 	}
 	
-	public Mono<Long> createBook(Book book) {
+	public Mono<Integer> createBook(Book book) {
+		Integer id = Utils.genId();
+		return databaseClient.sql("INSERT INTO books(id, name, pages) VALUES(:id, :name, :pages ) ")
+				.bind("id", id)
+				.bind("name", book.getName())
+				.bind("pages", book.getPages())
+				.fetch().rowsUpdated().thenReturn(id);
+	}
+	
+	public Mono<Long> createBook(Book book, final String authorName, final int age) {
+		
+		
 		return databaseClient.sql("INSERT INTO books(id, name, pages) VALUES(:id, :name, :pages ) ")
 				.bind("id", Utils.genId())
 				.bind("name", book.getName())

@@ -7,7 +7,7 @@ type Query{
 }
 
 type Mutation{
-	createBook(name:String, pages:Int):String
+	createBook(bookName:String, pages:Int, authorName:String, age:Int):String
 }
 
 type Book {
@@ -15,5 +15,13 @@ type Book {
 	id:Int
 	name:String
 	pages:Int
+	author:Author
+}
+
+type Author {
+
+	id:Int
+	name:String,
+	age:Int
 	
 }

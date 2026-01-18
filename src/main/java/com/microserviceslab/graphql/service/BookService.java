@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.microserviceslab.graphql.model.Author;
 import com.microserviceslab.graphql.model.Book;
+import com.microserviceslab.graphql.repository.AuthorRepository;
 import com.microserviceslab.graphql.repository.BookRepository;
 
 import graphql.schema.DataFetcher;
@@ -18,6 +20,9 @@ public class BookService {
 	@Autowired
 	@Qualifier("bookRepository")
 	private BookRepository bookRepo;
+	
+	@Autowired
+	private AuthorRepository authorRepo;
 
 	public DataFetcher<CompletableFuture<Book>> getBook(){
 		return env -> {
@@ -32,11 +37,17 @@ public class BookService {
 		};
 	}
 	
-	public DataFetcher<CompletableFuture<Long>> createBook(){
+	public DataFetcher<CompletableFuture<Integer>> createBook(){
 		return evn -> {
-			final String name = evn.getArgument("name");
+			final String bookName = evn.getArgument("bookName");
 			final Integer pages = evn.getArgument("pages");
-			return bookRepo.createBook(new Book(null, name, pages)).toFuture();
+			Book book = new Book(null, bookName, pages);
+			
+			final String authorName = evn.getArgument("authorName");
+			final Integer age = evn.getArgument("age");
+			return bookRepo.createBook(book)
+					.flatMap(bookId -> authorRepo.createAuthor(new Author(null, authorName, age, bookId)))
+					.map(authorId -> authorId).toFuture();
 		};
 	}
 	

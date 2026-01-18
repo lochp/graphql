@@ -19,3 +19,8 @@ http://localhost:8080/graphql
   "query": "mutation { createBook(name: \"My new book\", pages: 101) }",
   "variables": {}
 }
+
+{
+  "query": "mutation { createBook(bookName: \"My new book\", pages: 101, authorName: \"Loc\", age: 35) }",
+  "variables": {}
+}

@@ -3,6 +3,7 @@ package com.microserviceslab.graphql;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
 import org.springframework.core.io.ClassPathResource;
 
+import com.microserviceslab.graphql.service.AuthorService;
 import com.microserviceslab.graphql.service.BookService;
 
 import graphql.GraphQL;
@@ -30,17 +32,23 @@ public class GraphqlApplication {
 	}
 	
 	@Autowired
+	@Qualifier("bookService")
 	private BookService bookService;
+	
+	@Autowired
+	@Qualifier("authorService")
+	private AuthorService authorService;
 	
 	@Bean
 	public GraphQL graphQl() throws SchemaProblem, IOException {
 		SchemaParser schemaParser = new SchemaParser();
-		ClassPathResource schema = new ClassPathResource("schema.graphql");
+		ClassPathResource schema = new ClassPathResource("schema.graphql"); 
 		TypeDefinitionRegistry typeDefinitionRegistry = schemaParser.parse(schema.getInputStream());
 		RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring()
 		.type(TypeRuntimeWiring.newTypeWiring("Query").dataFetcher("getBook", bookService.getBook()))
 		.type(TypeRuntimeWiring.newTypeWiring("Query").dataFetcher("getBooks", bookService.getBooks()))
 		.type(TypeRuntimeWiring.newTypeWiring("Mutation").dataFetcher("createBook", bookService.createBook()))
+		.type(TypeRuntimeWiring.newTypeWiring("Book").dataFetcher("author", authorService.getAuthorDataFetcher()))
 		.build();
 		
 		SchemaGenerator generator = new SchemaGenerator();
